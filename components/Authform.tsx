@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FieldErrors } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import OtpModal from "./otpModal"; // Make sure this component exists
 type FormType = "Sign-In" | "Sign-Up";
 import { Label } from "@/components/ui/label";
@@ -47,7 +46,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [accountId, setAccountId] = useState<string | null>(null);
-    const router = useRouter();
 
     const formSchema = authFormSchema(type);
 
@@ -55,7 +53,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
         register,
         handleSubmit,
         watch,
-        reset,
         formState: { errors },
     } = useForm<SignInFormType | SignUpFormType>({
         resolver: zodResolver(formSchema),
@@ -77,8 +74,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
             const user =
                 type === "Sign-Up"
                     ? await createAccount({
-                        firstName: values.firstName || "",
-                        lastName: values.lastName || "",
+                        firstName: (values as SignUpFormType).firstName || "",
+                        lastName: (values as SignUpFormType).lastName || "",
                         email: values.email,
                         password: values.password
                     })
@@ -136,8 +133,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
                                     disabled={isLoading}
                                     {...register("firstName")}
                                 />
-                                {errors.firstName && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>
+                                {(errors as FieldErrors<SignUpFormType>).firstName && (
+                                    <p className="text-red-500 text-xs mt-1">{(errors as FieldErrors<SignUpFormType>).firstName?.message}</p>
                                 )}
                             </LabelInputContainer>
                             <LabelInputContainer>
@@ -149,8 +146,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
                                     disabled={isLoading}
                                     {...register("lastName")}
                                 />
-                                {errors.lastName && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>
+                                {(errors as FieldErrors<SignUpFormType>).lastName && (
+                                    <p className="text-red-500 text-xs mt-1">{(errors as FieldErrors<SignUpFormType>).lastName?.message}</p>
                                 )}
                             </LabelInputContainer>
                         </div>
@@ -222,9 +219,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
                                 )}
                             </button>
                         </div>
-                        {errors.confirmPassword && (
+                        {(errors as FieldErrors<SignUpFormType>).confirmPassword && (
                             <p className="text-red-500 text-xs mt-1">
-                                {errors.confirmPassword.message}
+                                {(errors as FieldErrors<SignUpFormType>).confirmPassword?.message}
                             </p>
                         )}
                     </LabelInputContainer>

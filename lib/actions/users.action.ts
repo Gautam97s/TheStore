@@ -6,7 +6,6 @@ import { appwriteConfig } from "../appwrite/config";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholderUrl } from "@/contants";
-import { error, log } from "console";
 import { redirect } from "next/navigation";
 
 interface UserDocument {
@@ -27,7 +26,9 @@ const getUserByEmail = async (email: string): Promise<UserDocument | null> => {
       appwriteConfig.usersCollectionId,
       [Query.equal("email", email)]
     );
-    return result.total > 0 ? result.documents[0] : null;
+    return result.total > 0
+      ? (result.documents[0] as unknown as UserDocument)
+      : null;
   } catch (error) {
     console.error("Error getting user by email:", error);
     throw error;

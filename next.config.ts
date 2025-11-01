@@ -23,6 +23,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        'node-fetch-native-with-agent': 'commonjs node-fetch-native-with-agent',
+      });
+    }
+    return config;
+  },
+  serverExternalPackages: ['node-appwrite', 'node-fetch-native-with-agent'],
 };
 
 export default nextConfig;
