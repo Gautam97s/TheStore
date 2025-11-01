@@ -51,7 +51,7 @@ const Search = () => {
     }
 
     fetchFiles()
-  }, [debouncedQuery, path, router])
+  }, [debouncedQuery, path, router, searchParams])
 
 
   useEffect(() => {

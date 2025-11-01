@@ -161,7 +161,7 @@ export const signOutUser = async () => {
 
 export const signInUser = async ({
   email,
-  password,
+  password: _password,
 }: {
   email: string;
   password: string;

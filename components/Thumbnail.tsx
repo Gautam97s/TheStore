@@ -2,7 +2,7 @@
 
 import { cn, getFileIcon } from '@/lib/utils';
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React from 'react'
 
 interface Props {
     type: string;

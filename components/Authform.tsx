@@ -92,7 +92,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 console.error("No account ID found in user response:", user);
                 setErrorMessage("Authentication succeeded but no account ID received");
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Authentication error:", error);
             setErrorMessage(
                 error instanceof Error
@@ -110,9 +110,10 @@ const AuthForm = ({ type }: { type: FormType }) => {
         try {
             console.log(`Signing in with ${provider}`);
             // Implement actual OAuth logic here
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(`${provider} sign-in error:`, error);
-            setErrorMessage(`Failed to sign in with ${provider}. Please try again.`);
+            const errorMessage = error instanceof Error ? error.message : `Failed to sign in with ${provider}. Please try again.`;
+            setErrorMessage(errorMessage);
         } finally {
             setIsLoading(false);
         }
