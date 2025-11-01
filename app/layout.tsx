@@ -27,7 +27,9 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  
 }>) {
+  const isProd = process.env.NODE_ENV === "production";
   return (
     <html lang="en" className={poppins.variable}>
       <body className={`${poppins.variable} font-poppins antialiased`}>
