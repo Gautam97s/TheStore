@@ -1,17 +1,32 @@
 import Link from 'next/link'
 import { Models } from 'node-appwrite'
 import React from 'react'
-import {Thumbnail} from './Thumbnail'
-import { constructFileUrl, convertFileSize } from '@/lib/utils'
+import { Thumbnail } from './Thumbnail'
+import { convertFileSize } from '@/lib/utils'
 import FormattedDateTime from './FormattedDateTime'
 import ActionDropdown from './ActionDropdown'
 
-const Card = ({ file }: { file: Models.Document }) => {
+// File document interface extending Models.Document
+interface FileDocument extends Models.Document {
+    types: FileType;
+    name: string;
+    url: string;
+    extension: string;
+    size: number;
+    bucketFileId: string;
+    owner: {
+        firstName: string;
+        lastName: string;
+    };
+    users?: string[];
+}
+
+const Card = ({ file }: { file: FileDocument }) => {
     return (
         <Link href={file.url} target='_blank' className='file-card'>
             <div className='flex justify-between'>
                 <Thumbnail
-                    type={file.type}
+                    type={file.types}
                     extension={file.extension}
                     url={file.url}
                     className="!size-20"

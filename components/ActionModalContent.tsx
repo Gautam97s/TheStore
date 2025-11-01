@@ -1,15 +1,30 @@
 import { Models } from 'node-appwrite'
 import React from 'react'
 import { Thumbnail } from './Thumbnail'
-import { constructFileUrl, convertFileSize, formatDateTime } from '@/lib/utils'
+import { convertFileSize, formatDateTime } from '@/lib/utils'
 import FormattedDateTime from './FormattedDateTime'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import Image from 'next/image'
 
-const ImageThumbnail = ({ file }: { file: Models.Document }) => (
+// File document interface extending Models.Document
+interface FileDocument extends Models.Document {
+    types: FileType;
+    name: string;
+    url: string;
+    extension: string;
+    size: number;
+    bucketFileId: string;
+    owner: {
+        firstName: string;
+        lastName: string;
+    };
+    users?: string[];
+}
+
+const ImageThumbnail = ({ file }: { file: FileDocument }) => (
     <div className='file-details-thumbnail'>
-        <Thumbnail type={file.type} extension={file.extension} url={file.url} />
+        <Thumbnail type={file.types} extension={file.extension} url={file.url} />
         <div className='flex flex-col'>
             <p className='subtitle-2 mb-1'>{file.name}</p>
             <FormattedDateTime date={file.$createdAt} className='caption' />
@@ -24,7 +39,7 @@ const DetailRow = ({ label, value }: { label: string, value: string }) => (
     </div>
 )
 
-export const FileDetails = ({ file }: { file: Models.Document }) => {
+export const FileDetails = ({ file }: { file: FileDocument }) => {
     return (
         <div>
             <ImageThumbnail file={file} />
@@ -39,7 +54,7 @@ export const FileDetails = ({ file }: { file: Models.Document }) => {
 }
 
 interface Props {
-    file: Models.Document;
+    file: FileDocument;
     onInputChange: React.Dispatch<React.SetStateAction<string[]>>;
     onRemove: (email: string) => void;
 }
@@ -54,10 +69,10 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
                 <div className='pt-4'>
                     <div className='flex justify-between'>
                         <p className='subtitle-2 text-light-100'>Shared with</p>
-                        <p className='subtitle-2 text-light-200'>{file.users.length} users</p>
+                        <p className='subtitle-2 text-light-200'>{file.users?.length || 0} users</p>
                     </div>
                     <ul className='pt-2'>
-                        {file.users.map((email : string) => (
+                        {file.users?.map((email: string) => (
                             <li key={email} className='flex items-center justify-between gap-2'>
                                 <p className='subtitle-2 '>{email}</p>
                                 <Button onClick={() => onRemove(email)} className='share-remove-user'>

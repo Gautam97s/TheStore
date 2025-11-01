@@ -7,7 +7,22 @@ import { getFiles } from '@/lib/actions/files.action'
 import { Models } from 'node-appwrite'
 import { Thumbnail } from './Thumbnail'
 import FormattedDateTime from './FormattedDateTime'
-import { useDebounce } from 'use-debounce';
+import { useDebounce } from 'use-debounce'
+
+// File document interface extending Models.Document
+interface FileDocument extends Models.Document {
+  types: FileType;
+  name: string;
+  url: string;
+  extension: string;
+  size: number;
+  bucketFileId: string;
+  owner: {
+    firstName: string;
+    lastName: string;
+  };
+  users?: string[];
+}
 
 
 const Search = () => {
@@ -15,7 +30,7 @@ const Search = () => {
   const [query, setQuery] = useState('')
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get('query') || '';
-  const [results, setResults] = useState<Models.Document[]>([])
+  const [results, setResults] = useState<FileDocument[]>([])
   const [open, setOpen] = useState(false)
   const router = useRouter();
   const path = usePathname();
@@ -24,7 +39,7 @@ const Search = () => {
 
   useEffect(() => {
     const fetchFiles = async () => {
-      if(debouncedQuery.length === 0){
+      if (debouncedQuery.length === 0) {
         setResults([])
         setOpen(false)
         return router.push(path.replace(searchParams.toString(), ""));
@@ -36,7 +51,7 @@ const Search = () => {
     }
 
     fetchFiles()
-  }, [debouncedQuery])
+  }, [debouncedQuery, path, router])
 
 
   useEffect(() => {
@@ -45,7 +60,7 @@ const Search = () => {
     }
   }, [searchQuery])
 
-  const handleClickItem = (file: Models.Document) => {
+  const handleClickItem = (file: FileDocument) => {
     setOpen(false);
     setResults([]);
 
@@ -81,7 +96,7 @@ const Search = () => {
                 >
                   <div className="flex cursor-pointer items-center gap-4">
                     <Thumbnail
-                      type={file.type}
+                      type={file.types}
                       extension={file.extension}
                       url={file.url}
                       className="size-9 min-w-9"

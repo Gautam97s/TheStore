@@ -5,14 +5,32 @@ import { getFileTypesParams } from '@/lib/utils'
 import { Models } from 'node-appwrite'
 import React from 'react'
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
+// File document interface extending Models.Document
+interface FileDocument extends Models.Document {
+    types: FileType;
+    name: string;
+    url: string;
+    extension: string;
+    size: number;
+    bucketFileId: string;
+    owner: {
+        firstName: string;
+        lastName: string;
+    };
+    users?: string[];
+}
+
 const page = async ({ searchParams, params }: SearchParamProps) => {
     const type = (await params)?.type as string
-    const searchText = ((await searchParams)?. query as string) || '' 
-    const sort = ((await searchParams)?. sort as string) || '$createdAt-desc' 
+    const searchText = ((await searchParams)?.query as string) || ''
+    const sort = ((await searchParams)?.sort as string) || '$createdAt-desc'
 
     const types = getFileTypesParams(type) as FileType[]
 
-    const files = await getFiles({types, searchText, sort});
+    const files = await getFiles({ types, searchText, sort });
 
     return (
         <div className='page-container '>
@@ -34,15 +52,15 @@ const page = async ({ searchParams, params }: SearchParamProps) => {
 
             {files.total > 0 ? (
                 <section className="file-list">
-                    {files.documents.map((file: Models.Document) => (
+                    {files.documents.map((file: FileDocument) => (
                         <Card key={file.$id} file={file} />
                     ))}
                 </section>
             ) : <p className='empty-list'>No files uploaded</p>
             }
         </div>
-    
-)
+
+    )
 }
 
 export default page

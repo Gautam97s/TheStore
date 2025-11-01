@@ -1,13 +1,11 @@
 export const dynamic = "force-dynamic";
-
+export const fetchCache = "force-no-store";
 
 import Image from "next/image";
 import Link from "next/link";
 import { Models } from "node-appwrite";
 
 import ActionDropdown from "@/components/ActionDropdown";
-
-
 import { Thumbnail } from "@/components/Thumbnail";
 import { Separator } from "@/components/ui/separator";
 
@@ -15,6 +13,21 @@ import { convertFileSize, getUsageSummary } from "@/lib/utils";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import { getFiles, getTotalSpaceUsed } from "@/lib/actions/files.action";
 import { Chart } from "@/components/Chart";
+
+// File document interface extending Models.Document
+interface FileDocument extends Models.Document {
+  types: FileType;
+  name: string;
+  url: string;
+  extension: string;
+  size: number;
+  bucketFileId: string;
+  owner: {
+    firstName: string;
+    lastName: string;
+  };
+  users?: string[];
+}
 
 const Dashboard = async () => {
   // Parallel requests
@@ -70,7 +83,7 @@ const Dashboard = async () => {
         <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
         {files.documents.length > 0 ? (
           <ul className="mt-5 flex flex-col gap-5">
-            {files.documents.map((file: Models.Document) => (
+            {files.documents.map((file: FileDocument) => (
               <Link
                 href={file.url}
                 target="_blank"
@@ -78,7 +91,7 @@ const Dashboard = async () => {
                 key={file.$id}
               >
                 <Thumbnail
-                  type={file.type}
+                  type={file.types}
                   extension={file.extension}
                   url={file.url}
                 />
