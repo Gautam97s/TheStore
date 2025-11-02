@@ -46,11 +46,11 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* ✅ Google Analytics (new ID: G-LRLLRGEWZ3) */}
+        {/* ✅ Google Analytics (new ID: G-YZPSDZ2WZ7) */}
         {isProd && (
           <>
             <Script
-              src="https://www.googletagmanager.com/gtag/js?id=G-LRLLRGEWZ3"
+              src="https://www.googletagmanager.com/gtag/js?id=G-YZPSDZ2WZ7"
               strategy="afterInteractive"
             />
             <Script id="ga-tracking" strategy="afterInteractive">
@@ -58,7 +58,7 @@ export default function RootLayout({
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', 'G-LRLLRGEWZ3');
+                gtag('config', 'G-YZPSDZ2WZ7');
               `}
             </Script>
           </>
