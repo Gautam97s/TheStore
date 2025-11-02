@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
+import Script from "next/script"; // ✅ Import Script component
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -62,6 +62,28 @@ export default function RootLayout({
               `}
             </Script>
           </>
+        )}
+        {/* ✅ Maze User Experience Analytics */}
+        {isProd && (
+          <Script id="maze-tracking" strategy="afterInteractive">
+            {`
+              (function (m, a, z, e) {
+                var s, t;
+                try {
+                  t = m.sessionStorage.getItem('maze-us');
+                } catch (err) {}
+                if (!t) {
+                  t = new Date().getTime();
+                  try { m.sessionStorage.setItem('maze-us', t); } catch (err) {}
+                }
+                s = a.createElement('script');
+                s.src = z + '?apiKey=' + e;
+                s.async = true;
+                a.getElementsByTagName('head')[0].appendChild(s);
+                m.mazeUniversalSnippetApiKey = e;
+              })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '991fb3e0-e4b6-4908-b3b2-8dad16b19cd8');
+            `}
+          </Script>
         )}
         {/* ✅ Contentsquare UX Analytics (replacing Maze) */}
         {isProd && (
