@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Script from "next/script"; // ✅ Import Script component
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -46,57 +46,30 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* ✅ Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-5MMCYMS9LQ"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-5MMCYMS9LQ');
-          `}
-        </Script>
-
-        {/* ✅ Hotjar / Contentsquare Tracking Script */}
-        {process.env.NODE_ENV === "production" && (
-          <Script id="hotjar-tracking" strategy="afterInteractive">
-            {`
-              (function (c, s, q, u, a, r, e) {
-                c.hj = c.hj || function(){(c.hj.q = c.hj.q || []).push(arguments)};
-                c._hjSettings = { hjid: a };
-                r = s.getElementsByTagName('head')[0];
-                e = s.createElement('script');
-                e.async = true;
-                e.src = q + c._hjSettings.hjid + u;
-                r.appendChild(e);
-              })(window, document, 'https://static.hj.contentsquare.net/c/csq-', '.js', 6563741);
-            `}
-          </Script>
-        )}
-        {/* ✅ Maze User Experience Analytics */}
+        {/* ✅ Google Analytics (new ID: G-LRLLRGEWZ3) */}
         {isProd && (
-          <Script id="maze-tracking" strategy="afterInteractive">
-            {`
-              (function (m, a, z, e) {
-                var s, t;
-                try {
-                  t = m.sessionStorage.getItem('maze-us');
-                } catch (err) {}
-                if (!t) {
-                  t = new Date().getTime();
-                  try { m.sessionStorage.setItem('maze-us', t); } catch (err) {}
-                }
-                s = a.createElement('script');
-                s.src = z + '?apiKey=' + e;
-                s.async = true;
-                a.getElementsByTagName('head')[0].appendChild(s);
-                m.mazeUniversalSnippetApiKey = e;
-              })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'f21d65ae-19f1-44ef-bf39-69bbff49f500');
-            `}
-          </Script>
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-LRLLRGEWZ3"
+              strategy="afterInteractive"
+            />
+            <Script id="ga-tracking" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-LRLLRGEWZ3');
+              `}
+            </Script>
+          </>
+        )}
+        {/* ✅ Contentsquare UX Analytics (replacing Maze) */}
+        {isProd && (
+          <Script
+            id="contentsquare-tracking"
+            src="https://t.contentsquare.net/uxa/82949c4b58b46.js"
+            strategy="afterInteractive"
+          />
         )}
       </body>
     </html>
