@@ -1,8 +1,8 @@
 
 
-# SaveIt
+# TheStore
 
-SaveIt is a web application built with Next.js and TypeScript, designed to help users manage and save their important files and data.
+TheStore is a web application built with Next.js and TypeScript, designed to help users manage and save their important files and data.
 
 ## Table of Contents
 
