@@ -27,8 +27,8 @@ TheStore is a web application built with Next.js and TypeScript, designed to hel
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/Gautam97s/SaveIt.git
-    cd SaveIt
+    git clone https://github.com/Gautam97s/TheStore.git
+    cd TheStore
     ```
 
 2.  **Install dependencies:**
